@@ -49,10 +49,6 @@
 //     return res
 // }
 
-// function subtract(num1, num2) {
-//     let res = [];
-
-// }
 
 
 
@@ -84,24 +80,20 @@
 
 
 
-// individual functions
 
 
 function sumStrings(n1, n2) {
-    n2 = n2.replace(/^0+/, '') || '0';
-    n1 = n1.replace(/^0+/, '') || '0';
-    let num1;
-    let num2;
+
+    let num1, num2
     let res = [];
 
-    if (n1.length > n2.length) {
-        num1 = n1
-        num2 = n2
-    } else {
-        num1 = n2;
-        num2 = n1;
-    }
-    num2 = num2.padStart(num1.length, '0')
+    const maxLen = Math.max(n1.length, n2.length);
+    num1 = n1.padStart(maxLen, '0');
+    num2 = n2.padStart(maxLen, '0');
+
+
+
+
     let carry = 0;
     for (let i = num1.length - 1; i >= 0; i--) {
         let sum = +num1[i] + +num2[i] + carry;
@@ -120,32 +112,11 @@ function sumStrings(n1, n2) {
 }
 
 
-function multiplyString(n1, n2) {
-    let num1;
-    let num2;
-
-    if (n1.length > n2.length) {
-        num1 = n1
-        num2 = n2
-    } else {
-        num1 = n2;
-        num2 = n1;
-    }
-    let adder = '1'
-    let res = num1
-    let i = '1'
-    function iter(counter, result) {
-
-
-    }
-
-    return iter('1', num1)
-}
-
-
 
 function subStrings(n1, n2) {
     let comparison = compare(n1, n2)
+    let num1, num2;
+    let sign = ''
 
     switch (comparison) {
         case '=':
@@ -155,8 +126,9 @@ function subStrings(n1, n2) {
             num2 = n2.padStart(n1.length, "0")
             break;
         case '<':
-            num1 = n1.padStart(n2.length, "0")
-            num2 = n2;
+            sign = '-'
+            num1 = n2;
+            num2 = n1.padStart(n2.length, "0")
             break;
     }
 
@@ -174,107 +146,124 @@ function subStrings(n1, n2) {
         } else if (digit1 > digit2) {
             res.push(digit1 - digit2)
         } else {
-            res.push((digit1 + 10 - digit2))
-            carry = 1
+            res.push((digit1 + 10 - digit2));
+            carry = 1;
         }
-
-
     }
+
+
     let i = res.length - 1;
-    while (i > 1) {
+    while (i > 0) {
         if (res[i] !== 0) {
             break;
         }
-        res.pop()
+        res.pop();
+        i--;
     }
+    res.push(sign)
     res.reverse();
     res.unshift(num1.slice(0, num1.length - num2.length))
     return res.join('');
 }
 
-console.log(subStrings('1000', '1'));
+
+
+
+
+function multiplyString(n1, n2) {
+    let num1, num2;
+
+    function multiplyDigit(n1, d) {
+        if (d === '0') return '0'
+        if (d === '1') return '1'
+
+        let res = [];
+
+    
+    
+    
+    }
+
+
+
+
+
+}
+
+
+
+
 
 function paddedNumbers(n1, n2) {
-    if (n1.length > n2.length) {
-        n2 = n2.padStart(n1.length, "0")
-    }
-    else {
-        n1 = n1.padStart(n2.length, "0")
-    }
+    n2 = n2.padStart(n1.length, "0")
+    n1 = n1.padStart(n2.length, "0")
     return { n1, n2 }
 }
+
+
+
+
+(
+    function () {
+        let startTime, endTime;
+
+        startTime = performance.now()
+        console.log(test(1000000, sumStrings, (a, b) => a + b, (n) => n.toString()));
+        console.log(performance.now() - startTime, "ms");
+
+        startTime = performance.now()
+        console.log(test(1000000, subStrings, (a, b) => a - b, (n) => n.toString()));
+        console.log(performance.now() - startTime, "ms");
+
+    }
+)
 
 function isEven(n) {
     return Number(n.charAt(n.length - 1)) % 2 === 0
 }
 
-
-
-
-
-
-
-
-
-
-
 function compare(n1, n2) {
+    if (n1.length > n2.length) return '>';
+    if (n1.length < n2.length) return '<';
 
+    for (let i = 0; i < n1.length; i++) {
+        if (n1[i] > n2[i]) return '>';
+        if (n1[i] < n2[i]) return '<';
+    }
+    return '=';
 
-    if (n1.length > n2.length) {
-        return '>'
-    } else if (n1.length < n2.length) {
-        return '<'
-    }
-    else if (n1 === n2) {
-        return '='
-    }
-    let i = 0
-    while (i != n1.length) {
-        let l, m;
-        l = Number(n1[i]);
-        m = Number(n2[i]);
-        if (l != m) {
-            if (l > m) {
-                return '>'
-            }
-            else {
-                return '<'
-            }
-        }
-        i++;
-    }
-    return '='
 }
 
-// function subStrings(n1, n2) {
-//     n2 = n2.replace(/^0+/, '') || '0';
-//     n1 = n1.replace(/^0+/, '') || '0';
-//     let num1;
-//     let num2;
-//     let res = [];
+function double(n) {
+    return sumStrings(n, n)
+}
 
-//     if (n1.length > n2.length) {
-//         num1 = n1
-//         num2 = n2
-//     } else {
-//         num1 = n2;
-//         num2 = n1;
-//     }
-//     num2 = num2.padStart(num1.length, '0')
-//     let carry = 0;
-//     for (let i = num1.length - 1; i >= 0; i--) {
-//         let sum = +num1[i] + +num2[i] + carry;
-//         if (sum > 9) {
-//             carry = 1;
-//             sum = sum - 10;
-//         } else {
-//             carry = 0;
-//         }
-//         res.push(String(sum))
-//     }
-//     if (carry > 0) {
-//         res.push(String(carry))
-//     }
-//     return res.reverse().join('');
-// }
+
+
+
+
+
+
+
+
+
+function test(n, fn, operation, inputModif) {
+    for (let i = 0; i < n; i++) {
+
+        let random1 = Math.floor(Math.random() * n);
+        let random2 = Math.floor(Math.random() * n);
+        let myCalc = fn(inputModif(random1), inputModif(random2));
+        let calc = inputModif(operation(random1, random2))
+
+        if (myCalc !== calc) {
+            return { i: i, "n1": random1, "n2": random2, "my result": myCalc, "actaul result": calc }
+        }
+
+    }
+    return "Passed"
+
+}
+
+
+
+
