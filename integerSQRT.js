@@ -1,3 +1,4 @@
+
 const dx = 0.001
 const TOLERANCE = 0.0001
 function average(a, b) { return ((a + b) / 2) }

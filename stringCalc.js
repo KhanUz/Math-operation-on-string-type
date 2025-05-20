@@ -170,18 +170,28 @@ function subStrings(n1, n2) {
 
 
 
+
+
+
+
 function multiplyString(n1, n2) {
     let num1, num2;
 
-    function multiplyDigit(n1, d) {
+    function multiplyDigit(n, d) {
         if (d === '0') return '0'
-        if (d === '1') return '1'
+        if (d === '1') return n
 
         let res = [];
+        let carry = 0;
+        for (let index = n.length - 1; index >= 0; index--) {
+            let multiplication = n[index] * d
+            res.push(multiplication % 10 + carry)
+            carry = parseInt(multiplication / 10)
+        }
+        res.push(carry)
+        res.reverse()
 
-    
-    
-    
+        return res.join("")
     }
 
 
