@@ -152,6 +152,15 @@ function subStrings(n1, n2) {
     }
 
 
+    trim(res)
+    res.push(sign)
+    res.reverse();
+    res.unshift(num1.slice(0, num1.length - num2.length))
+    return res.join('');
+}
+
+
+function trim(res) {
     let i = res.length - 1;
     while (i > 0) {
         if (res[i] !== 0) {
@@ -160,14 +169,7 @@ function subStrings(n1, n2) {
         res.pop();
         i--;
     }
-    res.push(sign)
-    res.reverse();
-    res.unshift(num1.slice(0, num1.length - num2.length))
-    return res.join('');
 }
-
-
-
 
 
 
@@ -176,33 +178,57 @@ function subStrings(n1, n2) {
 
 function multiplyString(n1, n2) {
     let num1, num2;
+    if (n1.length > n2.length) {
+        num1 = n1
+        num2 = n2
+    } else {
+        num1 = n2
+        num2 = n1
+    }
+    let resultHolder = []
+
 
     function multiplyDigit(n, d) {
-        if (d === '0') return '0'
-        if (d === '1') return n
+        if (d === '0') return [0]
+        if (d === '1') return n.split("")
 
         let res = [];
-        let carry = 0;
+        let carry = 0; let multiplication;
         for (let index = n.length - 1; index >= 0; index--) {
-            let multiplication = n[index] * d
-            res.push(multiplication % 10 + carry)
+            multiplication = n[index] * d + carry
+
+            res.push(multiplication % 10)
             carry = parseInt(multiplication / 10)
         }
+
         res.push(carry)
+        trim(res)
         res.reverse()
 
-        return res.join("")
+        return res
     }
 
+    function zeros(n) {
+        return '0'.repeat(n)
+    }
 
+    for (let i = num2.length - 1; i >= 0; i--) {
+        let d = num2[i]
 
+        let tmp = (multiplyDigit(num1, d))
+        tmp.push(zeros(num2.length - 1 - i))
+        resultHolder.push(tmp.join(''))
+    }
 
+    let res = resultHolder[0];
+    for (let i = 1; i < resultHolder.length; i++) {
+        res = sumStrings(resultHolder[i], res)
+    }
 
+    return res
 }
 
-
-
-
+runTest()
 
 function paddedNumbers(n1, n2) {
     n2 = n2.padStart(n1.length, "0")
@@ -212,21 +238,19 @@ function paddedNumbers(n1, n2) {
 
 
 
+function runTest() {
+    let startTime, endTime;
 
-(
-    function () {
-        let startTime, endTime;
+    startTime = performance.now()
+    console.log(test(1000000, multiplyString, (a, b) => a * b, (n) => n.toString()));
+    console.log(performance.now() - startTime, "ms");
 
-        startTime = performance.now()
-        console.log(test(1000000, sumStrings, (a, b) => a + b, (n) => n.toString()));
-        console.log(performance.now() - startTime, "ms");
+    startTime = performance.now()
+    console.log(test(1000000, multiplyString, (a, b) => a * b, (n) => n.toString()));
+    console.log(performance.now() - startTime, "ms");
 
-        startTime = performance.now()
-        console.log(test(1000000, subStrings, (a, b) => a - b, (n) => n.toString()));
-        console.log(performance.now() - startTime, "ms");
+}
 
-    }
-)
 
 function isEven(n) {
     return Number(n.charAt(n.length - 1)) % 2 === 0
